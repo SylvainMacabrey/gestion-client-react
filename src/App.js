@@ -1,26 +1,61 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Client from "./Client";
+import ClientForm from "./ClientForm";
+import Modal from "./Modal";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  state = {
+    clients: [
+      {id: 1, name: "Sylvain Macabrey"},
+      {id: 2, name: "Emmanuel Macron"},
+      {id: 3, name: "Edouard Phillip"},
+    ],
+    openModal: false,
+    clientAtModified: {}
+  }
+
+  deleteClient = (id) => {
+    const clients = this.state.clients.slice();
+    const index = clients.findIndex((client) => client.id === id);
+    clients.splice(index, 1);
+    this.setState({clients});
+  }
+
+  addClient = (client) => {
+    const clients = this.state.clients.slice();
+    clients.push(client);
+    this.setState({clients});
+  }
+
+  toggleModal = (client) => {
+    this.setState({clientAtModified: client, openModal: !this.state.openModal});
+  }
+
+  updateClient = (client) => {
+
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <div className="container liste-clients">
+          <h1>Liste de clients</h1>
+          <ul className="list-group">
+          {
+            this.state.clients.map(client => (<Client client={client} onModified={this.toggleModal} onDelete={this.deleteClient}/>))
+          }
+          </ul>
+        </div>
+        <div className="container new-client">
+          <ClientForm onClientAdd={this.addClient}/>
+        </div>
+        <Modal updateClient={this.updateClient} client={this.state.clientAtModified} openModal={this.state.openModal} onModified={this.toggleModal}/>
+      </div>
+    );
+  }
+
 }
 
 export default App;
