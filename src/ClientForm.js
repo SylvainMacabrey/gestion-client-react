@@ -16,7 +16,7 @@ class ClientForm extends React.Component {
         const client = {id: new Date().getTime(), name: this.state.newClient};
         this.props.onClientAdd(client);
         this.setState({newClient: ""});
-      }
+    }
 
     render() {
         return <form className="text-center border border-light p-5" onSubmit={this.createClient}>

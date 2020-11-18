@@ -3,24 +3,31 @@ import {MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter} from "mdbreact";
 
 class Modal extends React.Component {
 
-    state = {
-        updateClient: {}
-    }
-
     constructor(props) {
         super(props);
-        this.state.updateClient = this.props.client;
+        this.state = {
+            id: null,
+            name: null,
+        }
+        this.updateClient = this.updateClient.bind(this);
+    }
+
+    componentWillReceiveProps (props) {
+        this.setState({ id: props.client.id })
+        this.setState({ name: props.client.name })
     }
 
     formChange = (event) => {
         const value = event.currentTarget.value;
-        this.setState({updateClient: value});
+        this.setState({name: value});
     }
 
     updateClient(event) {
         event.preventDefault();
         const value = event.currentTarget.value;
-        console.log(value);
+        this.setState({name: value});
+        this.props.updateClient({id: this.state.id, name: this.state.name});
+        this.props.onModified({id: this.state.id, name: this.state.name});
     }
 
     render() {
@@ -33,11 +40,11 @@ class Modal extends React.Component {
                     </MDBModalHeader>
                     <MDBModalBody>
                         <div className="md-form mb-5">
-                            <input type="text" id="editName" className="form-control validate" value={this.state.updateClient.name} onChange={this.formChange}/>
+                            <input type="text" id="editName" className="form-control validate" value={this.state.name} onChange={this.formChange}/>
                         </div>
                     </MDBModalBody>
                     <MDBModalFooter className="justify-content-center">
-                        <button className="btn btn-default">Enregistrer la modification</button>
+                        <button className="btn btn-default" data-dismiss="modal">Enregistrer la modification</button>
                     </MDBModalFooter>
                 </form>
             </MDBModal>

@@ -13,7 +13,10 @@ class App extends React.Component {
       {id: 3, name: "Edouard Phillip"},
     ],
     openModal: false,
-    clientAtModified: {}
+    clientAtModified: {
+      id: null,
+      name: null
+    }
   }
 
   deleteClient = (id) => {
@@ -34,7 +37,10 @@ class App extends React.Component {
   }
 
   updateClient = (client) => {
-
+    const clients = this.state.clients.slice();
+    const index = clients.findIndex((c) => c.id === client.id);
+    clients[index].name = client.name;
+    this.setState({clients});
   }
 
   render() {
@@ -44,7 +50,7 @@ class App extends React.Component {
           <h1>Liste de clients</h1>
           <ul className="list-group">
           {
-            this.state.clients.map(client => (<Client client={client} onModified={this.toggleModal} onDelete={this.deleteClient}/>))
+            this.state.clients.map(client => (<Client client={client} onModified={this.toggleModal} onDelete={this.deleteClient} key={client.id}/>))
           }
           </ul>
         </div>
